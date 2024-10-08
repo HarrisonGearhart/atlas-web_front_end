@@ -447,7 +447,7 @@ a:active {
     border: var(--button-border);
     font-size: var(--button-font-size);
     color: var(--button-color);
-    text-decoration: var(--button-hover-text-decoration);
+    text-decoration: var(--button-text-decoration);
 }
 
 .button:hover {
@@ -502,6 +502,7 @@ a:active {
     --text-color: var(--color-white);
     --section-title-color: var(--color-white);
     background-color: var(--color-black);
+    --button-color: var(--color-white); 
 }
 
 .container {
