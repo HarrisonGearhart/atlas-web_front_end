@@ -669,6 +669,11 @@ ul.row {
     color: var(--color-primary);
 }
 
+.card-work .card-outer {
+    position: relative;
+    overflow: hidden;
+}
+
 .card-work .card-inner {
     position: absolute;
     top: -0.1rem;
