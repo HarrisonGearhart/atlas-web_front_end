@@ -8,6 +8,6 @@
 }
 
 .warning {
-    @extend: .info;
+    @extend .info;
     color: #ff0000;
 }
