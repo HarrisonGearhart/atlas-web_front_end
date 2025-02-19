@@ -162,7 +162,7 @@
   }
 
   .button-primary:hover {
-    color: var(--color-white);
+    color: var(--color-primary);
     background: var(--color-white);
   }
   
