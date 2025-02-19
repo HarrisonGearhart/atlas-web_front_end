@@ -717,7 +717,7 @@
   }
 
   /* Form group
-============================== */
+============================= */
 
   .form-group {
     padding: 1rem;
@@ -730,8 +730,8 @@
     transition: .3s;
   }
 
-  /* Form field
-============================== */
+/* Form field
+============================= */
 
   .form-field-container {
     position: relative;
@@ -741,8 +741,8 @@
     font-style: normal;
   }
 
-  /* Form help
-============================== */
+/* Form help
+============================= */
 
   .forn-group .form-help {
     margin: 0;
