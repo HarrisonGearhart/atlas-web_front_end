@@ -20,7 +20,10 @@ function countPrimeNumbers() {
 }
 
 const startTime = performance.now();
-const primeCount = countPrimeNumbers();
-const endTime = performance.now();
 
-console.log(`Execution time of printing countPrimeNumbers was ${endTime - startTime} milliseconds.`);
+for (let i = 0; i < 100; i++) {
+    countPrimeNumbers(); 
+}
+
+const endTime = performance.now();
+console.log(`Execution time of calculating prime numbers 100 times was ${endTime - startTime} milliseconds.`);
