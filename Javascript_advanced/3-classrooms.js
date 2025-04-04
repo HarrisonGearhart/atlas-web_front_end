@@ -1,4 +1,4 @@
-function createClassRoom(numbersOfStudents) {
+function createClassRoom(numberOfStudents) {
     function studentSeat(seat) {
         return function() {
             return seat;
