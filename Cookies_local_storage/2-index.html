@@ -18,28 +18,38 @@
     <h1>Cookies</h1>
     <!-- Show cookies button -->
     <button onclick="showCookies()">Show the cookies</button>
-
     <script>
         // Function to set cookies with an expiration of 10 days
         function setCookies() {
             var firstname = document.getElementById('firstname').value;
             var email = document.getElementById('email').value;
-
             // Calculate the expiration date (10 days from now)
             var expirationDate = new Date();
             expirationDate.setTime(expirationDate.getTime() + (10 * 24 * 60 * 60 * 1000)); // 10 days
             var expires = "expires=" + expirationDate.toUTCString();
-
             // Set cookies with expiration
-            document.cookie = "firstname=" + firstname + "; " + expires + "; path=/atlas-web_front_end/Cookies_local_storage/";
-            document.cookie = "email=" + email + "; " + expires + "; path=/atlas-web_front_end/Cookies_local_storage/";
+            document.cookie = "firstname=" + firstname + "; " + expires + "; path=/";
+            document.cookie = "email=" + email + "; " + expires + "; path=/";
         }
-
-        // Function to display cookies
+        // Function to retrieve a cookie value by name
+        function getCookie(name) {
+            var nameEq = name + "=";
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.indexOf(nameEq) === 0) {
+                    return cookie.substring(nameEq.length, cookie.length);
+                }
+            }
+            return ""; // Return empty string if cookie is not found
+        }
+        // Function to display cookies as Email: EMAIL - Firstname: FIRSTNAME
         function showCookies() {
-            var p = document.createElement('p');            
-            var cookies = document.cookie;
-            p.innerHTML = "Cookies: " + cookies;
+            var p = document.createElement('p');
+            var email = getCookie('email');
+            var firstname = getCookie('firstname');
+            // Display the cookies 
+            p.innerHTML = "Email: " + email + " - Firstname: " + firstname;
             document.body.appendChild(p);
         }
     </script>
