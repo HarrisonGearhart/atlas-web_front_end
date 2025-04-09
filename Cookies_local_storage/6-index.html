@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+</head>
+<body>
+    <h1>Shopping Cart</h1>
+    <div id="store"></div>
+    <script>
+        // Check if Session Storage is available
+        if (typeof(Storage) === "undefined") {
+            alert("Sorry, your browser does not support Web storage. Try again with a better one.");
+        } else {
+            // Available items for sale
+            const availableItems = ["Shampoo", "Soap", "Sponge", "Water"];       
+            
+            // Function to add item to cart
+            function addItemToCart(item) {
+                // Save the item to sessionStorage with a value of true
+                sessionStorage.setItem(item, true);
+                displayCart();  // Display cart after adding an item
+            }
+
+            // Function to create the store and display items
+            function createStore() {
+                // Create a <ul> element for the store
+                const storeList = document.createElement('ul');               
+                
+                // Loop through available items and create list items
+                availableItems.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = item;
+                    listItem.onclick = function() {
+                        addItemToCart(item);
+                    };
+                    storeList.appendChild(listItem);
+                });
+
+                // Append the store list to the DOM
+                const storeDiv = document.getElementById('store');
+                storeDiv.appendChild(storeList);
+            }
+
+            // Function to display the cart message
+            function displayCart() {
+                // Count the number of items in sessionStorage
+                const cartItems = Object.keys(sessionStorage).filter(key => sessionStorage.getItem(key) === 'true');
+                const cartMessage = document.createElement('p');
+                
+                if (cartItems.length > 0) {
+                    cartMessage.textContent = `You previously had ${cartItems.length} items in your cart.`;
+                    document.body.appendChild(cartMessage);
+                }
+            }
+
+            // Create the store and display cart on page load
+            window.onload = function() {
+                createStore();    // Display available items
+                displayCart();    // Show the cart message if items are in the cart
+            };
+        }
+    </script>
+</body>
+</html>
