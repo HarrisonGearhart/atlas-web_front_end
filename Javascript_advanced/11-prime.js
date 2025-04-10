@@ -22,16 +22,17 @@ function countPrimeNumbers() {
 const startTime = performance.now();
 let count = 0;
 
+
 function runCalculation() {
     if (count < 100) {
         countPrimeNumbers();  
         count++;
-        setTimeout(runCalculation, 0);  
-    } else {
-        const endTime = performance.now();
-        console.log(`Execution time of calculating prime numbers 100 times was ${endTime - startTime} milliseconds.`);
-    }
+        }
 }
 
 
-runCalculation();
+setTimeout(runCalculation, 0);
+
+const endTime = performance.now();
+        console.log(`Execution time of calculating prime numbers 100 times was ${endTime - startTime} milliseconds.`);
+    
