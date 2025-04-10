@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Task 2</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"
+            integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+</head>
+<body>
+<script type="application/javascript">
+    $(function() {
+        let table = $('<table></table>');
+        let header = $('<thead><tr><th>Firstname</th><th>Lastname</th></tr></thead>');
+        let body = $('<tbody></tbody>');
+
+        // Adding rows with family members
+        body.append('<tr><td>Guillaume</td><td>Salva</td></tr>');
+        body.append('<tr><td>Paulette</td><td>Salva</td></tr>');
+        body.append('<tr><td>Antoine</td><td>Salva</td></tr>');
+
+        // Combining header and body to form the table
+        table.append(header).append(body);
+
+        // Appending the table to the body
+        $('body').append(table);
+    });
+</script>
+</body>
+</html>

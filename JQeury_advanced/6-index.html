@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8" />
+    <title>Task 6</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+        /* CSS to style the 'delete' cell with orange background */
+        .delete-cell {
+            background-color: orange;
+            cursor: pointer;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<script type="application/javascript">
+    // Function to create the family tree table
+    function createFamilyTree() {
+        const table = $("<table></table>").appendTo("body");
+        const thead = $("<thead><tr><th>Firstname</th><th>Lastname</th></tr></thead>").appendTo(table); // Removed "Action"
+        $("<tbody></tbody>").appendTo(table);  // Empty tbody added
+    }
+
+    // Modified function to add a new family member
+    function addNewMember(firstName, lastName, position) {
+        const row = $("<tr></tr>");
+        $("<td></td>").text(firstName).appendTo(row);
+        $("<td></td>").text(lastName).appendTo(row);
+        
+        const deleteCell = $("<td></td>").text("(x)").addClass("delete-cell").appendTo(row);
+        deleteCell.on("click", function() {
+            row.remove();
+        });
+
+        if (position === "before") {
+            $("tbody").prepend(row);  // Insert the row at the top
+        } else {
+            $("tbody").append(row);  // Insert the row at the bottom
+        }
+    }
+
+    // Function to create the form for adding new members
+    function createForm() {
+        const form = $("<form></form>").prependTo("body");
+
+        // First name input
+        const firstNameInput = $("<input>").attr("type", "text").attr("placeholder", "First Name").appendTo(form);
+        
+        // Last name input (using nth-of-type to select the second input)
+        const lastNameInput = $("<input>").attr("type", "text").attr("placeholder", "Last Name").appendTo(form);
+        
+        // Select input with options for Before and After
+        const positionSelect = $("<select></select>").appendTo(form);
+        $("<option>").attr("value", "before").text("Before").appendTo(positionSelect);
+        $("<option>").attr("value", "after").text("After").appendTo(positionSelect);
+
+        // Submit button
+        const submitButton = $("<input>").attr("type", "submit").val("Add Member").appendTo(form);
+
+        // Submit event handler
+        form.on("submit", function(e) {
+            e.preventDefault();
+            const firstName = firstNameInput.val();
+            const lastName = lastNameInput.val();
+            const position = positionSelect.val();
+            
+            addNewMember(firstName, lastName, position);  // Call addNewMember with form values
+            firstNameInput.val("");  // Clear the input fields after submission
+            lastNameInput.val("");   // Clear the input fields after submission
+        });
+    }
+
+    // Call createFamilyTree to set up the table structure
+    createFamilyTree();
+
+    // Call createForm to set up the input form
+    createForm();
+</script>
+
+</body>
+</html>

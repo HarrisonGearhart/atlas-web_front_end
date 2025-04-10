@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8" />
+    <title>Task 5</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+        /* CSS to style the 'delete' cell with orange background */
+        .delete-cell {
+            background-color: orange;
+            cursor: pointer;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<script type="application/javascript">
+    // Function to create the family tree table
+    function createFamilyTree() {
+        // Create the table with the header and an empty tbody
+        const table = $("<table></table>").appendTo("body");
+        const thead = $("<thead><tr><th>Firstname</th><th>Lastname</th><th>Action</th></tr></thead>").appendTo(table);
+        $("<tbody></tbody>").appendTo(table);  // Empty tbody added
+    }
+
+    // Function to add a new family member to the table
+    function addNewMember(firstName, lastName) {
+        // Create a new row with the first name, last name, and delete option
+        const row = $("<tr></tr>").appendTo("tbody");
+        $("<td></td>").text(firstName).appendTo(row);
+        $("<td></td>").text(lastName).appendTo(row);
+        
+        // Create the delete cell with the (x) and apply CSS class for styling
+        const deleteCell = $("<td></td>").text("(x)").addClass("delete-cell").appendTo(row);
+
+        // On clicking the (x) cell, remove the entire row
+        deleteCell.on("click", function() {
+            row.remove();
+        });
+    }
+
+    // Call createFamilyTree to set up the table structure
+    createFamilyTree();
+
+    // Use addNewMember to add the fake data
+    addNewMember("Guillaume", "Salva");
+    addNewMember("Arielle", "Snizt");
+    addNewMember("Fanette", "Snizt");
+    addNewMember("Gerard", "Snizt");
+    addNewMember("Victor", "Salva");
+</script>
+
+</body>
+</html>

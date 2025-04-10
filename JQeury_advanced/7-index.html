@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Task 7</title>
+    <!-- Load jQuery from the official CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  </head>
+
+  <body>
+    <script type="application/javascript">
+      // Function to add the search results to the page
+      function addNewArticle(id, title, snippet) {
+        // Create the list item to hold the article
+        const listitem = $('<li></li>');
+
+        // Add the first paragraph for the ID and title
+        listitem.append(
+          $('<p></p>').append(
+            $('<span></span>').text(`${id} - `),
+            $('<b></b>').text(title)
+          )
+        );
+
+        // Add the second paragraph for the snippet (without HTML tags)
+        listitem.append(
+          $('<p></p>').text(snippet.replace(/<\/?[^>]+(>|$)/g, ""))
+        );
+
+        // Append the list item to the unordered list
+        $('ul').append(listitem);
+      }
+
+      // Function to handle the query to Wikipedia
+      function queryWikipedia(search) {
+        // Build the URL for the Wikipedia API search
+        const wikiapi = `https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=${search}&origin=*`;
+
+        // Perform the API request
+        $.get(wikiapi).done(function(data) {
+          // Iterate through the search results and display them
+          data.query.search.forEach(function(article) {
+            addNewArticle(article.pageid, article.title, article.snippet);
+          });
+        });
+      }
+
+      // Function to create the search form and handle user input
+      function createSearchForm() {
+        // Create input, submit button, and empty unordered list
+        $('body').append(
+          $('<input type="text" />'),
+          $('<input type="submit" value="Submit" />'),
+          $('<ul></ul>')
+        );
+
+        // Set up the event listener for the submit button
+        $('input[type="submit"]').on('click', function() {
+          // Get the value entered by the user
+          const searchTerm = $('input[type="text"]').val();
+
+          // Clear the previous results
+          $('ul').empty();
+
+          // Clear the input box
+          $('input[type="text"]').val('');
+
+          // Perform the search on Wikipedia
+          queryWikipedia(searchTerm);
+        });
+      }
+
+      // Initialize the search form when the page loads
+      $(function() {
+        createSearchForm();
+      });
+    </script>
+  </body>
+</html>

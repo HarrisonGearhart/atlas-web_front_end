@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8" />
+    <title>Task 8</title>
+    <!-- Load jQuery from the official CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+    <script type="application/javascript">
+        // Variables to manage search parameters like offset, items per page, and the current search query
+        const itemsPerPage = 10;
+        let currentOffset = 0;
+        let inputbox;
+        let currentSearchQuery = '';
+
+        // Function to create the search form and handle the user input for searching
+        function createSearchForm() {
+            inputbox = $('<input type="text" />');
+            const submitbox = $('<input type="submit" value="Submit" />');
+            const ulist = $('<ul id="results"></ul>');
+            const pagination = $('<ul id="pagination"></ul>');
+
+            // Append the elements to the body
+            $('body').append(inputbox, submitbox, ulist, pagination);
+
+            // Handle the submit button click event
+            submitbox.on('click', function () {
+                const searching = inputbox.val();
+                currentSearchQuery = searching;  // Store the search query
+
+                // Reset previous results and clear input box
+                $('#results').empty();
+                inputbox.val('');
+                $('#pagination').empty();
+
+                // Apply styles to the pagination container
+                $('#pagination').css({
+                    "list-style-type": "none",
+                    display: "flex",
+                    flexDirection: "row",
+                });
+
+                // Initiate the query search
+                queryWikipedia(searching);
+            });
+        }
+
+        // Function to create and append a new article to the search result list
+        function addNewArticle(id, title, snippet) {
+            const listitem = $('<li></li>');
+
+            // Create paragraphs to display the article's ID and title
+            const pone = $('<p></p>').text(id).append(
+                $('<span></span>').text(' - '),
+                $('<b></b>').text(title)
+            );
+            const ptwo = $('<p></p>').text(snippet.replace(/<\/?[^>]+(>|$)/g, ""));  // Remove HTML tags from the snippet
+
+            // Append the paragraphs to the list item and then add it to the results list
+            listitem.append(pone, ptwo);
+            $('#results').append(listitem);
+        }
+
+        // Function to handle the Wikipedia query and process the API response
+        function queryWikipedia(search, offset = 0) {
+            const wikiapi = `https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=${search}&origin=*`;
+
+            // Make an API call to retrieve search results
+            $.get(wikiapi, {
+                action: 'query',
+                list: 'search',
+                srsearch: search,
+                format: 'json',
+                origin: '*',
+                sroffset: offset
+            }).done(function (data) {
+                // Clear previous results
+                $('#results').empty();
+
+                // Add articles to the list
+                data.query.search.forEach(function (article) {
+                    addNewArticle(article.pageid, article.title, article.snippet);
+                });
+
+                // Create the pagination controls
+                buildPagination(data.query.searchinfo.totalhits, itemsPerPage, offset, search);
+            });
+        }
+
+        // Function to build the pagination controls dynamically
+        function buildPagination(numberOfItems, itemsPerPage, currentOffset, search) {
+            $('#pagination').empty();  // Clear previous pagination items
+
+            const totalPages = Math.ceil(numberOfItems / itemsPerPage);
+            // Create pagination items for each page
+            for (let page = 1; page <= totalPages; page++) {
+                const newOffset = (page - 1) * itemsPerPage;
+
+                const listItem = $('<li></li>')
+                    .text(page)
+                    .css({
+                        cursor: 'pointer',
+                        'margin-left': '10px',
+                        fontWeight: currentOffset === newOffset ? 'bold' : 'normal'
+                    })
+                    .on('click', function () {
+                        // Perform a query for the selected page if the offset is different
+                        if (currentOffset !== newOffset) {
+                            $('#results').empty();
+                            queryWikipedia(search, newOffset);
+                        }
+                    });
+
+                // Append each page item to the pagination list
+                $('#pagination').append(listItem);
+            }
+        }
+
+        // Initialize the search form when the page is loaded
+        $(document).ready(function () {
+            createSearchForm();
+        });
+    </script>
+</body>
+</html>
