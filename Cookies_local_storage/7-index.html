@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task 7</title>
+</head>
+<body>
+<script>
+    const availableItems = ['Shampoo', 'Soap', 'Sponge', 'Water'];
+
+    // Check if sessionStorage is supported by the browser
+    if (!sessionStorageIsEnabled()) {
+        alert('Sorry, your browser does not support Web storage. Try again with a better one.');
+    } else {
+        createStore();
+        displayCart();
+    }
+
+    // Add an item to the cart in sessionStorage
+    function addItemToCart(item) {
+        const cart = getCartFromStorage();
+        cart[item] = cart[item] ? cart[item] + 1 : 1;
+        sessionStorage.setItem('cart', JSON.stringify(cart));
+        displayCart();
+    }
+
+    // Remove an item from the cart in sessionStorage
+    function removeItemFromCart(item) {
+        const cart = getCartFromStorage();
+        delete cart[item];
+        sessionStorage.setItem('cart', JSON.stringify(cart));
+        displayCart();
+    }
+
+    // Clear the entire cart from sessionStorage
+    function clearCart() {
+        sessionStorage.clear();
+        displayCart();
+    }
+
+    // Get the current cart from sessionStorage (or return an empty object)
+    function getCartFromStorage() {
+        const cart = sessionStorage.getItem('cart');
+        if (!cart) return {};
+        try {
+            return JSON.parse(cart);
+        } catch (e) {
+            console.error(e);
+            return {};
+        }
+    }
+
+    // Create the store UI with available items for purchase
+    function createStore() {
+        const heading = document.createElement('h2');
+        const storeList = document.createElement('ul');
+        heading.textContent = 'Available products:';
+        document.body.appendChild(heading);
+        document.body.appendChild(storeList);
+
+        availableItems.forEach(item => {
+            const storeItem = document.createElement('li');
+            storeItem.textContent = item;
+            storeItem.style.cursor = 'pointer';
+            storeItem.addEventListener('click', () => addItemToCart(item));
+            storeList.appendChild(storeItem);
+        });
+    }
+
+    // Display the cart UI, either showing items or an empty message
+    function displayCart() {
+        const existingCartDiv = document.querySelector('div');
+        if (existingCartDiv) {
+            existingCartDiv.innerHTML = ''; // Clear existing cart contents
+        } else {
+            const heading = document.createElement('h2');
+            const newCartDiv = document.createElement('div');
+            heading.textContent = 'Your cart:';
+            document.body.appendChild(heading);
+            document.body.appendChild(newCartDiv);
+        }
+        updateCart();
+    }
+
+    // Update the cart display with current cart data
+    function updateCart() {
+        const cartList = document.createElement('ul');
+        const cartDiv = document.querySelector('div');
+        const cart = getCartFromStorage();
+        const cartSize = Object.entries(cart).length;
+
+        if (cartSize === 0) {
+            const emptyCartMsg = document.createElement('li');
+            emptyCartMsg.textContent = 'Your cart is empty';
+            cartList.appendChild(emptyCartMsg);
+        } else {
+            const clearCartMsg = document.createElement('li');
+            clearCartMsg.textContent = 'Clear my cart';
+            clearCartMsg.addEventListener('click', clearCart);
+            clearCartMsg.style.cursor = 'pointer';
+            cartList.appendChild(clearCartMsg);
+
+            for (let [item, quantity] of Object.entries(cart)) {
+                const cartItem = document.createElement('li');
+                cartItem.innerHTML = `${item} x ${quantity} <small style="cursor: pointer;">(remove)</small>`;
+                cartItem.querySelector('small').addEventListener('click', () => removeItemFromCart(item));
+                cartList.appendChild(cartItem);
+            }
+        }
+        cartDiv.appendChild(cartList);
+    }
+
+    // Check if sessionStorage is supported
+    function sessionStorageIsEnabled() {
+        try {
+            const testKey = '__test__';
+            sessionStorage.setItem(testKey, 'test');
+            sessionStorage.removeItem(testKey);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+</script>
+</body>
+</html>
